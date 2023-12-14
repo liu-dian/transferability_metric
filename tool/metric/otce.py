@@ -9,7 +9,8 @@ def compute_coupling(X_src, X_tar, Y_src, Y_tar):
     cost_function = lambda x, y: geomloss.utils.squared_distances(x, y)
 
     C = cost_function(X_src, X_tar)
-    P = ot.emd(ot.unif(X_src.shape[0]), ot.unif(X_tar.shape[0]), C, numItermax=100000)
+
+    P = ot.emd(ot.unif(X_src.shape[0]), ot.unif(X_tar.shape[0]), C.numpy(), numItermax=100000)
     W = np.sum(P * np.array(C.numpy()))
 
     return P, W
@@ -81,6 +82,8 @@ def test():
 def optimal_transport(src_root_dir, tar_root_dir):
     src_x, src_y = read_data(src_root_dir)
     tar_x, tar_y = read_data(tar_root_dir)
+    src_x = torch.tensor(src_x, dtype=torch.float)
+    tar_x = torch.tensor(tar_x, dtype=torch.float)
     P, W = compute_coupling(src_x, tar_x, src_y, tar_y)
     ce = compute_CE(P, src_y, tar_y)
 
