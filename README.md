@@ -1,4 +1,4 @@
-# Transferability Metric
+# Transferability Metric Toolkit
 
 This repository provides an implementation of various transferability metrics for evaluating the performance of pre-trained models in transfer learning tasks. The supported methods include:
 
