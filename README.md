@@ -11,7 +11,7 @@ Supported methods include:
 
 - [Negative Conditional Entropy in `Transferability and Hardness of Supervised Classification Tasks (NCE, ICCV 2019)](https://arxiv.org/pdf/1908.08142v1.pdf)
 
-- [OTCE: A Transferability Metric for Cross-Domain Cross-Task Representations](https://arxiv.org/abs/2103.13843)
+- [OTCE: A Transferability Metric for Cross-Domain Cross-Task Representations （OTCE, CVPR2021）](https://arxiv.org/abs/2103.13843)
   
 | Domain   | Finetuned Acc | HScore | LEEP     | LogME | NCE | OTCE |
 | -------- | --------      | ------ |-------   | -----| --- | ----- |
