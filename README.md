@@ -34,6 +34,8 @@ The `tool.metric` module provides the following functions that accept specific i
 - `optimal_transport(src_root_dir, tar_root_dir)`
 
 ## Example Results
+Source domain:amazon
+Model:Resnet
 
 | Domain   | Finetuned Acc | HScore | LEEP     | LogME | NCE | OTCE |
 | -------- | --------      | ------ |-------   | -----| --- | ----- |
