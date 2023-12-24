@@ -35,6 +35,7 @@ The `tool.metric` module provides the following functions that accept specific i
 
 ## Example Results
 Source domain:amazon
+
 Model:Resnet
 
 | Domain   | Finetuned Acc | HScore | LEEP     | LogME | NCE | OTCE |
