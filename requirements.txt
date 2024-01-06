@@ -4,4 +4,3 @@ tqdm
 numba
 geomloss
 pot
-ot
