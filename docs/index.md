@@ -1,17 +1,14 @@
-# Welcome to MkDocs
+# Welcome to Transferability Metric Toolkit
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+Welcome to the documentation for My Project. Here you'll find comprehensive guides and documentation to help you start working with My Project as quickly as possible, as well as support if you get stuck. Let's jump right in!
 
-## Commands
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+## Quick Start
+
+To get started with My Project, follow these steps:
+
+1. Install the project:
 
 ## Project layout
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+ 
