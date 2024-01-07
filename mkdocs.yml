@@ -2,3 +2,4 @@ site_name: My Docs
 theme: readthedocs
 nav:
  - Get started: index.md
+ - Background: introduction.md
