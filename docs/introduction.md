@@ -10,6 +10,15 @@ An imperative question in transfer learning is transferability, i.e. when a tran
 H-score is based on the intuition that a model transfers well to a target dataset if the target embeddings have low inter-class variance and low feature redundancy. These quantities are computed by constructing the interclass and data covariance matrices. 
 ## LEEP  
 LEEP begins by leveraging the source model to generate pseudo-labels for the target dataset. Subsequently, it evaluates the empirical conditional distribution, which quantifies the probability of the actual target labels given these pseudo-labels from the source model. These probabilities are then utilized to calculate the log-likelihood, drawing a comparison between the actual target labels and the predictions made by the source model. The underlying principle is that if the source model's predictions are concentrated around the true target labels—forming distinct clusters, so to speak—then the model's adaptation to the target dataset is likely to be more successful.
+
+The LEEP $\mathcal{T}$ can be described as:
+
+$$
+\mathcal{T}=\mathbb{E}\log \left(\sum_{z \in \mathcal{C}_s} \hat{P}\left(y \mid z\right) \theta\left(y \right)_{z}\right)
+$$
+
+where $\theta\left(y\right)_{z}$ is the predictions of pre-trained model on source category, $\hat{P}\left(y \mid z\right)$ is the empirical conditional distribution estimated by prediction and ground-truth label.
+
 ## LogME 
 After embedding the target images using the source feature extractor, LogME computes the probability of the target labels conditioned on these embeddings (i.e. the evidence of target labels). By setting up a graphical model and using independence assumptions between samples, the authors propose an efficient algorithm for computing such evidence.
 ## NCE

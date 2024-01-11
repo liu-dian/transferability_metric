@@ -1,8 +1,7 @@
 version: 2
 
-mkdocs:
-  configuration: mkdocs.yml
-  fail_on_warning: true
+sphinx:
+  configuration: docs/source/conf.py
 
 build:
   os: "ubuntu-22.04"
