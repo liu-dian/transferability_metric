@@ -5,3 +5,4 @@ numba
 geomloss
 pot
 recommonmark
+sphinx-markdown-tables
