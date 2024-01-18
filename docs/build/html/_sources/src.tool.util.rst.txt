@@ -1,0 +1,21 @@
+src.tool.util package
+=====================
+
+Submodules
+----------
+
+src.tool.util.read\_data module
+-------------------------------
+
+.. automodule:: src.tool.util.read_data
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: src.tool.util
+   :members:
+   :undoc-members:
+   :show-inheritance:

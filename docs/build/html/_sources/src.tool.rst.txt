@@ -1,0 +1,19 @@
+src.tool package
+================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   src.tool.metric
+   src.tool.util
+
+Module contents
+---------------
+
+.. automodule:: src.tool
+   :members:
+   :undoc-members:
+   :show-inheritance:

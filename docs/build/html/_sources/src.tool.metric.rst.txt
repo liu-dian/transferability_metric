@@ -1,0 +1,53 @@
+src.tool.metric package
+=======================
+
+Submodules
+----------
+
+src.tool.metric.hscore module
+-----------------------------
+
+.. automodule:: src.tool.metric.hscore
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+src.tool.metric.leep module
+---------------------------
+
+.. automodule:: src.tool.metric.leep
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+src.tool.metric.logme module
+----------------------------
+
+.. automodule:: src.tool.metric.logme
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+src.tool.metric.nce module
+--------------------------
+
+.. automodule:: src.tool.metric.nce
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+src.tool.metric.otce module
+---------------------------
+
+.. automodule:: src.tool.metric.otce
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: src.tool.metric
+   :members:
+   :undoc-members:
+   :show-inheritance:

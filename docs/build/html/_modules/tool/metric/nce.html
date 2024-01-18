@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tool.metric.nce &mdash; transferability_metric 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            transferability_metric
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">tool</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">transferability_metric</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tool.metric.nce</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tool.metric.nce</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;negative_conditional_entropy&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="negative_conditional_entropy"><a class="viewcode-back" href="../../../tool.metric.html#tool.metric.nce.negative_conditional_entropy">[docs]</a><span class="k">def</span> <span class="nf">negative_conditional_entropy</span><span class="p">(</span><span class="n">src_root_dir</span><span class="p">,</span> <span class="n">tar_root_dir</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Negative Conditional Entropy in `Transferability and Hardness of Supervised</span>
+<span class="sd">    Classification Tasks (ICCV 2019) &lt;https://arxiv.org/pdf/1908.08142v1.pdf&gt;`_.</span>
+
+<span class="sd">    The NCE :math:`\mathcal{H}` can be described as:</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \mathcal{H}=-\sum_{y \in \mathcal{C}_t} \sum_{z \in \mathcal{C}_s} \hat{P}(y, z) \log \frac{\hat{P}(y, z)}{\hat{P}(z)}</span>
+
+<span class="sd">    where :math:`\hat{P}(z)` is the empirical distribution and :math:`\hat{P}\left(y \mid z\right)` is the empirical</span>
+<span class="sd">    conditional distribution estimated by source and target label.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        source_labels (np.ndarray): predicted source labels.</span>
+<span class="sd">        target_labels (np.ndarray): groud-truth target labels.</span>
+
+<span class="sd">    Shape:</span>
+<span class="sd">        - source_labels: (N, ) elements in [0, :math:`C_s`), with source class number :math:`C_s`.</span>
+<span class="sd">        - target_labels: (N, ) elements in [0, :math:`C_t`), with target class number :math:`C_t`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">source_labels</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">(</span><span class="n">src_root_dir</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">target_labels</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">(</span><span class="n">tar_root_dir</span><span class="p">)</span>
+    <span class="n">C_t</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">target_labels</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">C_s</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">source_labels</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">source_labels</span><span class="p">)</span>
+
+    <span class="n">joint</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">C_t</span><span class="p">,</span> <span class="n">C_s</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># placeholder for the joint distribution, shape [C_t, C_s]</span>
+    <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">source_labels</span><span class="p">,</span> <span class="n">target_labels</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">joint</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">s</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">N</span>
+    <span class="n">p_z</span> <span class="o">=</span> <span class="n">joint</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">p_target_given_source</span> <span class="o">=</span> <span class="p">(</span><span class="n">joint</span> <span class="o">/</span> <span class="n">p_z</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># P(y | z), shape [C_s, C_t]</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">p_z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span>  <span class="c1"># valid Z, shape [C_s]</span>
+    <span class="n">p_target_given_source</span> <span class="o">=</span> <span class="n">p_target_given_source</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1e-20</span>  <span class="c1"># remove NaN where p(z) = 0, add 1e-20 to avoid log (0)</span>
+    <span class="n">entropy_y_given_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">-</span> <span class="n">p_target_given_source</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p_target_given_source</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">conditional_entropy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">entropy_y_given_z</span> <span class="o">*</span> <span class="n">p_z</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))[</span><span class="n">mask</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="o">-</span><span class="n">conditional_entropy</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Enming Zhang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

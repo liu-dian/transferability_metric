@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Background &mdash; transferability_metric 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            transferability_metric
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">transferability_metric</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Background</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/introduction_副本.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="background">
+<h1>Background<a class="headerlink" href="#background" title="Permalink to this heading"></a></h1>
+<p>In order to make more people learn how to use this toolkit better, we introduce the background of the research field of the transfer learning, especially about the transferability metrics.</p>
+<p>Transfer learning aims to re-use knowledge learned on a source task to help learning a target task, for which typically there is scarce training data. Moreover, training models from scratch can be excessively costly and time-consuming. The most prevalent method of transfer learning is to pre-train a source model on a large source dataset, and then fine-tune it on the target dataset. However, different target tasks benefit from using different source model architectures or pre-training on different source datasets. Hence, a key challenge is determining which source model is best suited for which target task, and doing so in a computationally efficient manner.</p>
+<p>An imperative question in transfer learning is transferability, i.e. when a transfer may work and to what extent. Traditionally, transferability is measured purely empirically using model loss or accuracy on the validation set. Transferability metrics provide heuristics for selecting the most suitable source models for a given target dataset, by avoiding directly transferring all the models. These methods generally work by applying a source model to the target dataset to compute embeddings or predictions. Then they efficiently assess how compatible these embeddings/predictions are with the target labels. This provides a proxy for how well the source model transfers to the target task.</p>
+<section id="h-score">
+<h2>H-score<a class="headerlink" href="#h-score" title="Permalink to this heading"></a></h2>
+<p>H-score is based on the intuition that a model transfers well to a target dataset if the target embeddings have low inter-class variance and low feature redundancy. These quantities are computed by constructing the interclass and data covariance matrices.</p>
+</section>
+<section id="leep">
+<h2>LEEP<a class="headerlink" href="#leep" title="Permalink to this heading"></a></h2>
+<p>LEEP begins by leveraging the source model to generate pseudo-labels for the target dataset. Subsequently, it evaluates the empirical conditional distribution, which quantifies the probability of the actual target labels given these pseudo-labels from the source model. These probabilities are then utilized to calculate the log-likelihood, drawing a comparison between the actual target labels and the predictions made by the source model. The underlying principle is that if the source model’s predictions are concentrated around the true target labels—forming distinct clusters, so to speak—then the model’s adaptation to the target dataset is likely to be more successful.</p>
+<p>The LEEP $\mathcal{T}$ can be described as:</p>
+<p>$$
+\mathcal{T}=\mathbb{E}\log \left(\sum_{z \in \mathcal{C}<em>s} \hat{P}\left(y \mid z\right) \theta\left(y \right)</em>{z}\right)
+$$</p>
+<p>where $\theta\left(y\right)_{z}$ is the predictions of pre-trained model on source category, $\hat{P}\left(y \mid z\right)$ is the empirical conditional distribution estimated by prediction and ground-truth label.</p>
+</section>
+<section id="logme">
+<h2>LogME<a class="headerlink" href="#logme" title="Permalink to this heading"></a></h2>
+<p>After embedding the target images using the source feature extractor, LogME computes the probability of the target labels conditioned on these embeddings (i.e. the evidence of target labels). By setting up a graphical model and using independence assumptions between samples, the authors propose an efficient algorithm for computing such evidence.</p>
+</section>
+<section id="nce">
+<h2>NCE<a class="headerlink" href="#nce" title="Permalink to this heading"></a></h2>
+<p>NCE adopts conditional entropy to evaluate transferability and task hardness under a particular setting, i.e., source and target tasks share the same input instances but different labels. They provide a derivation that the empirical transferability is lower bounded by the negative conditional entropy.</p>
+</section>
+<section id="otce">
+<h2>OTCE<a class="headerlink" href="#otce" title="Permalink to this heading"></a></h2>
+<p>OTCE characterizes the transferability between source and target tasks based on their domain difference and task difference. The domain difference can be explicitly evaluated between source and target data using Wasserstein distance computed by solving the classic Optimal Transport (OT) problem. The OT problem also estimates the joint probability between source and target samples, which allows us to derive the task difference in terms of the conditional entropy between the source and target task labels.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Enming Zhang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

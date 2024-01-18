@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tool.metric.otce &mdash; transferability_metric 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            transferability_metric
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">tool</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">transferability_metric</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tool.metric.otce</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tool.metric.otce</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">ot</span>
+<span class="kn">import</span> <span class="nn">geomloss</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="compute_coupling"><a class="viewcode-back" href="../../../tool.metric.html#tool.metric.otce.compute_coupling">[docs]</a><span class="k">def</span> <span class="nf">compute_coupling</span><span class="p">(</span><span class="n">X_src</span><span class="p">,</span> <span class="n">X_tar</span><span class="p">,</span> <span class="n">Y_src</span><span class="p">,</span> <span class="n">Y_tar</span><span class="p">):</span>
+    <span class="n">cost_function</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">geomloss</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">squared_distances</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="n">C</span> <span class="o">=</span> <span class="n">cost_function</span><span class="p">(</span><span class="n">X_src</span><span class="p">,</span> <span class="n">X_tar</span><span class="p">)</span>
+
+    <span class="n">P</span> <span class="o">=</span> <span class="n">ot</span><span class="o">.</span><span class="n">emd</span><span class="p">(</span><span class="n">ot</span><span class="o">.</span><span class="n">unif</span><span class="p">(</span><span class="n">X_src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">ot</span><span class="o">.</span><span class="n">unif</span><span class="p">(</span><span class="n">X_tar</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">C</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">numItermax</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">P</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">numpy</span><span class="p">()))</span>
+
+    <span class="k">return</span> <span class="n">P</span><span class="p">,</span> <span class="n">W</span></div>
+
+
+<div class="viewcode-block" id="compute_CE"><a class="viewcode-back" href="../../../tool.metric.html#tool.metric.otce.compute_CE">[docs]</a><span class="k">def</span> <span class="nf">compute_CE</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Y_src</span><span class="p">,</span> <span class="n">Y_tar</span><span class="p">):</span>
+    <span class="n">src_label_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Y_src</span><span class="o">.</span><span class="n">flatten</span><span class="p">())))</span>
+    <span class="n">tar_label_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Y_tar</span><span class="o">.</span><span class="n">flatten</span><span class="p">())))</span>
+
+    <span class="c1"># joint distribution of source and target label</span>
+    <span class="n">P_src_tar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Y_src</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Y_tar</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">y1</span> <span class="ow">in</span> <span class="n">src_label_set</span><span class="p">:</span>
+        <span class="n">y1_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Y_src</span> <span class="o">==</span> <span class="n">y1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">y2</span> <span class="ow">in</span> <span class="n">tar_label_set</span><span class="p">:</span>
+            <span class="n">y2_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Y_tar</span> <span class="o">==</span> <span class="n">y2</span><span class="p">)</span>
+
+            <span class="n">RR</span> <span class="o">=</span> <span class="n">y1_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">y2_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">CC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">y2_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y1_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="n">P_src_tar</span><span class="p">[</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="n">RR</span><span class="p">,</span> <span class="n">CC</span><span class="p">])</span>
+
+    <span class="c1"># marginal distribution of source label</span>
+    <span class="n">P_src</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">P_src_tar</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">ce</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">y1</span> <span class="ow">in</span> <span class="n">src_label_set</span><span class="p">:</span>
+        <span class="n">P_y1</span> <span class="o">=</span> <span class="n">P_src</span><span class="p">[</span><span class="n">y1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">y2</span> <span class="ow">in</span> <span class="n">tar_label_set</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">P_src_tar</span><span class="p">[</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ce</span> <span class="o">+=</span> <span class="o">-</span><span class="p">(</span><span class="n">P_src_tar</span><span class="p">[</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">]</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">P_src_tar</span><span class="p">[</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">]</span> <span class="o">/</span> <span class="n">P_y1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">ce</span></div>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">def test():</span>
+<span class="sd">    # -----------start: randomly generate the testing data-----------</span>
+<span class="sd">    src_x_list = []</span>
+<span class="sd">    src_y_list = []</span>
+<span class="sd">    tar_x_list = []</span>
+<span class="sd">    tar_y_list = []</span>
+
+<span class="sd">    NUM_SAMPLE = 100</span>
+
+<span class="sd">    # suppose the feature dimension is 512, and the label is in range [0,10].</span>
+<span class="sd">    for i in range(NUM_SAMPLE):</span>
+<span class="sd">        src_x_list.append(np.random.randn(512))</span>
+<span class="sd">        tar_x_list.append(np.random.randn(512))</span>
+
+<span class="sd">        src_y_list.append(np.random.randint(0, 10))</span>
+<span class="sd">        tar_y_list.append(np.random.randint(0, 10))</span>
+
+<span class="sd">    # the shape of x is n*512, and the shape of y is n*1</span>
+<span class="sd">    src_x = torch.tensor(np.array(src_x_list), dtype=torch.float)</span>
+<span class="sd">    tar_x = torch.tensor(np.array(tar_x_list), dtype=torch.float)</span>
+<span class="sd">    src_y = np.array(src_y_list)[:, np.newaxis]</span>
+<span class="sd">    tar_y = np.array(tar_y_list)[:, np.newaxis]</span>
+<span class="sd">    # -----------end: randomly generate the testing data------------</span>
+
+<span class="sd">    # obtain the optimal coupling matrix P and the wasserstein distance W</span>
+<span class="sd">    P, W = compute_coupling(src_x, tar_x, src_y, tar_y)</span>
+
+<span class="sd">    # compute the conditonal entropy (ce)</span>
+<span class="sd">    ce = compute_CE(P, src_y, tar_y)</span>
+
+<span class="sd">    print(&#39;Wasserstein distance:%.4f, Conditonal Entropy: %.4f&#39; % (W, ce))</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+<div class="viewcode-block" id="optimal_transport"><a class="viewcode-back" href="../../../tool.metric.html#tool.metric.otce.optimal_transport">[docs]</a><span class="k">def</span> <span class="nf">optimal_transport</span><span class="p">(</span><span class="n">src_root_dir</span><span class="p">,</span> <span class="n">tar_root_dir</span><span class="p">):</span>
+    <span class="n">src_x</span><span class="p">,</span> <span class="n">src_y</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">(</span><span class="n">src_root_dir</span><span class="p">)</span>
+    <span class="n">tar_x</span><span class="p">,</span> <span class="n">tar_y</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">(</span><span class="n">tar_root_dir</span><span class="p">)</span>
+    <span class="n">src_x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">src_x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">tar_x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">tar_x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">P</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">compute_coupling</span><span class="p">(</span><span class="n">src_x</span><span class="p">,</span> <span class="n">tar_x</span><span class="p">,</span> <span class="n">src_y</span><span class="p">,</span> <span class="n">tar_y</span><span class="p">)</span>
+    <span class="n">ce</span> <span class="o">=</span> <span class="n">compute_CE</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">src_y</span><span class="p">,</span> <span class="n">tar_y</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ce</span></div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Enming Zhang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
