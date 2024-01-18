@@ -4,3 +4,4 @@ tqdm
 numba
 geomloss
 pot
+recommonmark
