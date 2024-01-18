@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 import os
 import sys
-sys.path.insert(0, os.path.abspath('/Users/liudianban/transferability_metric/src'))  # 将项目根目录添加到模块查找路径中去
+sys.path.insert(0, os.path.abspath('../../src'))  # 将项目根目录添加到模块查找路径中去
 
 project = 'transferability_metric'
 copyright = '2024, Enming Zhang'
