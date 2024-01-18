@@ -44,10 +44,4 @@ tool.metric.otce module
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
 
-.. automodule:: tool.metric
-   :members:
-   :undoc-members:
-   :show-inheritance:
