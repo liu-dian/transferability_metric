@@ -1,7 +1,4 @@
-"""
-@author: Yong Liu
-@contact: liuyong1095556447@163.com
-"""
+
 import sys
 
 import numpy as np
@@ -22,14 +19,14 @@ def h_score(root_dir):
 
     where :math:`f` is the features extracted by the model to be ranked, :math:`y` is the groud-truth label vector
 
-    Args:
-        features (np.ndarray):features extracted by pre-trained model.
-        labels (np.ndarray):  groud-truth labels.
+    The H-score measures the alignment between the feature covariance and the conditional expectation of the
+    features given the labels. A higher H-score indicates better transferability.
 
-    Shape:
-        - features: (N, F), with number of samples N and feature dimension F.
-        - labels: (N, ) elements in [0, :math:`C_t`), with target class number :math:`C_t`.
-        - score: scalar.
+    Args:
+        root_dir (str): The directory from which to read the features and labels.
+
+    Returns:
+        score (float): The computed H-Score, a scalar value representing transferability.
     """
     f, y = read_data(root_dir)
 

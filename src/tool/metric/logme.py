@@ -1,7 +1,4 @@
-"""
-@author: Yong Liu
-@contact: liuyong1095556447@163.com
-"""
+
 import numpy as np
 from numba import njit
 from ..util import *
@@ -14,17 +11,18 @@ def log_maximum_evidence(root_dir, regression=False, return_weights=False):
     Log Maximum Evidence in `LogME: Practical Assessment of Pre-trained Models
     for Transfer Learning (ICML 2021) <https://arxiv.org/pdf/2102.11005.pdf>`_.
 
-    Args:
-        features (np.ndarray): feature matrix from pre-trained model.
-        targets (np.ndarray): targets labels/values.
-        regression (bool, optional): whether to apply in regression setting. (Default: False)
-        return_weights (bool, optional): whether to return bayesian weight. (Default: False)
+    This function reads features and targets from the provided directory, and computes the LogME score,
+    which can be used to assess the compatibility between the pre-trained features and the target task.
+    It can be applied in both classification and regression settings.
 
-    Shape:
-        - features: (N, F) with element in [0, :math:`C_t`) and feature dimension F, where :math:`C_t` denotes the number of target class
-        - targets: (N, ) or (N, C), with C regression-labels.
-        - weights: (F, :math:`C_t`).
-        - score: scalar.
+    Args:
+        root_dir (str): The directory from which to read the features and targets.
+        regression (bool, optional): Whether the task is regression. If False, classification is assumed. (Default: False)
+        return_weights (bool, optional): If True, the function also returns Bayesian weights in addition to the LogME score. (Default: False)
+
+    Returns:
+        score (float): The LogME score, a scalar indicating the transferability.
+        weights (np.ndarray, optional): The Bayesian weights matrix, returned only if `return_weights` is True.
     """
     features, targets = read_data(root_dir)
     f = features.astype(np.float64)
@@ -66,7 +64,24 @@ def log_maximum_evidence(root_dir, regression=False, return_weights=False):
 @njit
 def each_evidence(y_, f, fh, v, s, vh, N, D):
     """
-    compute the maximum evidence for each class
+    Compute the maximum evidence for each class or regression target.
+
+    This is a helper function called within log_maximum_evidence to calculate the evidence
+    for a given set of targets y_, using a precomputed singular value decomposition.
+
+    Args:
+        y_ (np.ndarray): The target vector for a specific class or regression target.
+        f (np.ndarray): The transposed feature matrix.
+        fh (np.ndarray): The original feature matrix.
+        v (np.ndarray): The left singular vectors from the SVD of f @ fh.
+        s (np.ndarray): The singular values from the SVD of f @ fh.
+        vh (np.ndarray): The right singular vectors from the SVD of f @ fh.
+        N (int): The number of samples.
+        D (int): The number of features.
+
+    Returns:
+        evidence (float): The evidence for the given target vector.
+        m (np.ndarray): The Bayesian weight vector for the given target vector.
     """
     alpha = 1.0
     beta = 1.0

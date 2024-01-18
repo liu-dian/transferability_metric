@@ -1,7 +1,4 @@
-"""
-@author: Yong Liu
-@contact: liuyong1095556447@163.com
-"""
+
 
 import numpy as np
 from ..util import *
@@ -21,14 +18,14 @@ def log_expected_empirical_prediction(root_dir):
 
     where :math:`\theta\left(y\right)_{z}` is the predictions of pre-trained model on source category, :math:`\hat{P}\left(y \mid z\right)` is the empirical conditional distribution estimated by prediction and ground-truth label.
 
-    Args:
-        predictions (np.ndarray): predictions of pre-trained model.
-        labels (np.ndarray): groud-truth labels.
+    The LEEP score quantifies the expected log-likelihood of the empirical conditional distribution of the
+    target labels given the source labels, as predicted by the pre-trained model.
 
-    Shape:
-        - predictions: (N, :math:`C_s`), with number of samples N and source class number :math:`C_s`.
-        - labels: (N, ) elements in [0, :math:`C_t`), with target class number :math:`C_t`.
-        - score: scalar
+    Args:
+        root_dir (str): The directory from which to read the predictions and labels.
+
+    Returns:
+        score (float): The computed LEEP score, a scalar value representing transferability.
     """
     predictions, labels = read_data(root_dir)
     N, C_s = predictions.shape

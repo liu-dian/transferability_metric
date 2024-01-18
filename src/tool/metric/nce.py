@@ -17,13 +17,18 @@ def negative_conditional_entropy(src_root_dir, tar_root_dir):
     where :math:`\hat{P}(z)` is the empirical distribution and :math:`\hat{P}\left(y \mid z\right)` is the empirical
     conditional distribution estimated by source and target label.
 
-    Args:
-        source_labels (np.ndarray): predicted source labels.
-        target_labels (np.ndarray): groud-truth target labels.
+    This implementation calculates NCE using the empirical distributions of source
+    and target labels obtained from the provided directories.
 
-    Shape:
-        - source_labels: (N, ) elements in [0, :math:`C_s`), with source class number :math:`C_s`.
-        - target_labels: (N, ) elements in [0, :math:`C_t`), with target class number :math:`C_t`.
+    Args:
+        src_root_dir (str): Directory containing the source dataset with labels.
+        tar_root_dir (str): Directory containing the target dataset with labels.
+
+    Returns:
+        A scalar value representing the negative conditional entropy.
+
+    The function reads the source and target data using the `read_data` utility,
+    which should return the features and labels for the datasets.
     """
     _, source_labels = read_data(src_root_dir)
     _, target_labels = read_data(tar_root_dir)
