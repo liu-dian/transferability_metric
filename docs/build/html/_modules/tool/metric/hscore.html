@@ -41,7 +41,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API Reference</a></li>
 </ul>
 
         </div>
@@ -69,10 +71,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tool.metric.hscore</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">@author: Yong Liu</span>
-<span class="sd">@contact: liuyong1095556447@163.com</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -93,14 +92,14 @@
 
 <span class="sd">    where :math:`f` is the features extracted by the model to be ranked, :math:`y` is the groud-truth label vector</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        features (np.ndarray):features extracted by pre-trained model.</span>
-<span class="sd">        labels (np.ndarray):  groud-truth labels.</span>
+<span class="sd">    The H-score measures the alignment between the feature covariance and the conditional expectation of the</span>
+<span class="sd">    features given the labels. A higher H-score indicates better transferability.</span>
 
-<span class="sd">    Shape:</span>
-<span class="sd">        - features: (N, F), with number of samples N and feature dimension F.</span>
-<span class="sd">        - labels: (N, ) elements in [0, :math:`C_t`), with target class number :math:`C_t`.</span>
-<span class="sd">        - score: scalar.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        root_dir (str): The directory from which to read the features and labels.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        score (float): The computed H-Score, a scalar value representing transferability.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">f</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span>
 

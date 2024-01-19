@@ -41,7 +41,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API Reference</a></li>
 </ul>
 
         </div>
@@ -69,10 +71,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tool.metric.logme</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">@author: Yong Liu</span>
-<span class="sd">@contact: liuyong1095556447@163.com</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">njit</span>
 <span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="o">*</span>
@@ -85,17 +84,18 @@
 <span class="sd">    Log Maximum Evidence in `LogME: Practical Assessment of Pre-trained Models</span>
 <span class="sd">    for Transfer Learning (ICML 2021) &lt;https://arxiv.org/pdf/2102.11005.pdf&gt;`_.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        features (np.ndarray): feature matrix from pre-trained model.</span>
-<span class="sd">        targets (np.ndarray): targets labels/values.</span>
-<span class="sd">        regression (bool, optional): whether to apply in regression setting. (Default: False)</span>
-<span class="sd">        return_weights (bool, optional): whether to return bayesian weight. (Default: False)</span>
+<span class="sd">    This function reads features and targets from the provided directory, and computes the LogME score,</span>
+<span class="sd">    which can be used to assess the compatibility between the pre-trained features and the target task.</span>
+<span class="sd">    It can be applied in both classification and regression settings.</span>
 
-<span class="sd">    Shape:</span>
-<span class="sd">        - features: (N, F) with element in [0, :math:`C_t`) and feature dimension F, where :math:`C_t` denotes the number of target class</span>
-<span class="sd">        - targets: (N, ) or (N, C), with C regression-labels.</span>
-<span class="sd">        - weights: (F, :math:`C_t`).</span>
-<span class="sd">        - score: scalar.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        root_dir (str): The directory from which to read the features and targets.</span>
+<span class="sd">        regression (bool, optional): Whether the task is regression. If False, classification is assumed. (Default: False)</span>
+<span class="sd">        return_weights (bool, optional): If True, the function also returns Bayesian weights in addition to the LogME score. (Default: False)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        score (float): The LogME score, a scalar indicating the transferability.</span>
+<span class="sd">        weights (np.ndarray, optional): The Bayesian weights matrix, returned only if `return_weights` is True.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">features</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span>
     <span class="n">f</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
@@ -137,7 +137,24 @@
 <span class="nd">@njit</span>
 <span class="k">def</span> <span class="nf">each_evidence</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">fh</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">vh</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">D</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    compute the maximum evidence for each class</span>
+<span class="sd">    Compute the maximum evidence for each class or regression target.</span>
+
+<span class="sd">    This is a helper function called within log_maximum_evidence to calculate the evidence</span>
+<span class="sd">    for a given set of targets y_, using a precomputed singular value decomposition.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        y_ (np.ndarray): The target vector for a specific class or regression target.</span>
+<span class="sd">        f (np.ndarray): The transposed feature matrix.</span>
+<span class="sd">        fh (np.ndarray): The original feature matrix.</span>
+<span class="sd">        v (np.ndarray): The left singular vectors from the SVD of f @ fh.</span>
+<span class="sd">        s (np.ndarray): The singular values from the SVD of f @ fh.</span>
+<span class="sd">        vh (np.ndarray): The right singular vectors from the SVD of f @ fh.</span>
+<span class="sd">        N (int): The number of samples.</span>
+<span class="sd">        D (int): The number of features.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        evidence (float): The evidence for the given target vector.</span>
+<span class="sd">        m (np.ndarray): The Bayesian weight vector for the given target vector.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.0</span>
     <span class="n">beta</span> <span class="o">=</span> <span class="mf">1.0</span>

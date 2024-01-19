@@ -18,6 +18,12 @@
 # -- Project information -----------------------------------------------------
 import os
 import sys
+from recommonmark.parser import CommonMarkParser
+source_parsers = {
+    '.md': CommonMarkParser,
+}
+source_suffix = ['.rst', '.md']
+
 sys.path.insert(0, os.path.abspath('../../src'))  # 将项目根目录添加到模块查找路径中去
 
 project = 'transferability_metric'
@@ -34,7 +40,7 @@ release = '0.1.0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['recommonmark','sphinx_markdown_tables','sphinx.ext.autodoc',
-    'sphinx.ext.viewcode']
+    'sphinx.ext.viewcode', 'sphinx.ext.mathjax']
 
 
 # Add any paths that contain templates here, relative to this directory.

@@ -41,7 +41,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API Reference</a></li>
 </ul>
 
         </div>
@@ -77,90 +79,103 @@
 <span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="o">*</span>
 
 <div class="viewcode-block" id="compute_coupling"><a class="viewcode-back" href="../../../tool.metric.html#tool.metric.otce.compute_coupling">[docs]</a><span class="k">def</span> <span class="nf">compute_coupling</span><span class="p">(</span><span class="n">X_src</span><span class="p">,</span> <span class="n">X_tar</span><span class="p">,</span> <span class="n">Y_src</span><span class="p">,</span> <span class="n">Y_tar</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the optimal transport plan (coupling) and the Wasserstein distance between</span>
+<span class="sd">    source and target distributions using the Earth Mover&#39;s Distance (EMD).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        X_src (torch.Tensor): Feature matrix for the source domain samples.</span>
+<span class="sd">        X_tar (torch.Tensor): Feature matrix for the target domain samples.</span>
+<span class="sd">        Y_src (np.ndarray): Labels for the source domain samples.</span>
+<span class="sd">        Y_tar (np.ndarray): Labels for the target domain samples.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        P (np.ndarray): The optimal transport plan matrix.</span>
+<span class="sd">        W (float): The Wasserstein distance given by the optimal transport plan.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Define the cost function as squared Euclidean distance</span>
     <span class="n">cost_function</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">geomloss</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">squared_distances</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
+    <span class="c1"># Compute the cost matrix</span>
     <span class="n">C</span> <span class="o">=</span> <span class="n">cost_function</span><span class="p">(</span><span class="n">X_src</span><span class="p">,</span> <span class="n">X_tar</span><span class="p">)</span>
 
+    <span class="c1"># Compute the optimal transport plan using EMD</span>
     <span class="n">P</span> <span class="o">=</span> <span class="n">ot</span><span class="o">.</span><span class="n">emd</span><span class="p">(</span><span class="n">ot</span><span class="o">.</span><span class="n">unif</span><span class="p">(</span><span class="n">X_src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">ot</span><span class="o">.</span><span class="n">unif</span><span class="p">(</span><span class="n">X_tar</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">C</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">numItermax</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+    <span class="c1"># Calculate the Wasserstein distance</span>
     <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">P</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">numpy</span><span class="p">()))</span>
 
     <span class="k">return</span> <span class="n">P</span><span class="p">,</span> <span class="n">W</span></div>
 
-
 <div class="viewcode-block" id="compute_CE"><a class="viewcode-back" href="../../../tool.metric.html#tool.metric.otce.compute_CE">[docs]</a><span class="k">def</span> <span class="nf">compute_CE</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Y_src</span><span class="p">,</span> <span class="n">Y_tar</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the Conditional Entropy (CE) of the target labels given the source labels</span>
+<span class="sd">    under the optimal transport plan.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        P (np.ndarray): The optimal transport plan matrix.</span>
+<span class="sd">        Y_src (np.ndarray): Labels for the source domain samples.</span>
+<span class="sd">        Y_tar (np.ndarray): Labels for the target domain samples.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ce (float): The conditional entropy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Create sets of unique labels in source and target domains</span>
     <span class="n">src_label_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Y_src</span><span class="o">.</span><span class="n">flatten</span><span class="p">())))</span>
     <span class="n">tar_label_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Y_tar</span><span class="o">.</span><span class="n">flatten</span><span class="p">())))</span>
 
-    <span class="c1"># joint distribution of source and target label</span>
+    <span class="c1"># Initialize the joint distribution matrix</span>
     <span class="n">P_src_tar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Y_src</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Y_tar</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
 
+    <span class="c1"># Populate the joint distribution matrix</span>
     <span class="k">for</span> <span class="n">y1</span> <span class="ow">in</span> <span class="n">src_label_set</span><span class="p">:</span>
         <span class="n">y1_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Y_src</span> <span class="o">==</span> <span class="n">y1</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">y2</span> <span class="ow">in</span> <span class="n">tar_label_set</span><span class="p">:</span>
             <span class="n">y2_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Y_tar</span> <span class="o">==</span> <span class="n">y2</span><span class="p">)</span>
-
             <span class="n">RR</span> <span class="o">=</span> <span class="n">y1_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">y2_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">CC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">y2_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y1_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
             <span class="n">P_src_tar</span><span class="p">[</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="n">RR</span><span class="p">,</span> <span class="n">CC</span><span class="p">])</span>
 
-    <span class="c1"># marginal distribution of source label</span>
+    <span class="c1"># Compute the marginal distribution for the source labels</span>
     <span class="n">P_src</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">P_src_tar</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
+    <span class="c1"># Compute the conditional entropy</span>
     <span class="n">ce</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="k">for</span> <span class="n">y1</span> <span class="ow">in</span> <span class="n">src_label_set</span><span class="p">:</span>
         <span class="n">P_y1</span> <span class="o">=</span> <span class="n">P_src</span><span class="p">[</span><span class="n">y1</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">y2</span> <span class="ow">in</span> <span class="n">tar_label_set</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">P_src_tar</span><span class="p">[</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">ce</span> <span class="o">+=</span> <span class="o">-</span><span class="p">(</span><span class="n">P_src_tar</span><span class="p">[</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">]</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">P_src_tar</span><span class="p">[</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">]</span> <span class="o">/</span> <span class="n">P_y1</span><span class="p">))</span>
+
     <span class="k">return</span> <span class="n">ce</span></div>
 
-<span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">def test():</span>
-<span class="sd">    # -----------start: randomly generate the testing data-----------</span>
-<span class="sd">    src_x_list = []</span>
-<span class="sd">    src_y_list = []</span>
-<span class="sd">    tar_x_list = []</span>
-<span class="sd">    tar_y_list = []</span>
-
-<span class="sd">    NUM_SAMPLE = 100</span>
-
-<span class="sd">    # suppose the feature dimension is 512, and the label is in range [0,10].</span>
-<span class="sd">    for i in range(NUM_SAMPLE):</span>
-<span class="sd">        src_x_list.append(np.random.randn(512))</span>
-<span class="sd">        tar_x_list.append(np.random.randn(512))</span>
-
-<span class="sd">        src_y_list.append(np.random.randint(0, 10))</span>
-<span class="sd">        tar_y_list.append(np.random.randint(0, 10))</span>
-
-<span class="sd">    # the shape of x is n*512, and the shape of y is n*1</span>
-<span class="sd">    src_x = torch.tensor(np.array(src_x_list), dtype=torch.float)</span>
-<span class="sd">    tar_x = torch.tensor(np.array(tar_x_list), dtype=torch.float)</span>
-<span class="sd">    src_y = np.array(src_y_list)[:, np.newaxis]</span>
-<span class="sd">    tar_y = np.array(tar_y_list)[:, np.newaxis]</span>
-<span class="sd">    # -----------end: randomly generate the testing data------------</span>
-
-<span class="sd">    # obtain the optimal coupling matrix P and the wasserstein distance W</span>
-<span class="sd">    P, W = compute_coupling(src_x, tar_x, src_y, tar_y)</span>
-
-<span class="sd">    # compute the conditonal entropy (ce)</span>
-<span class="sd">    ce = compute_CE(P, src_y, tar_y)</span>
-
-<span class="sd">    print(&#39;Wasserstein distance:%.4f, Conditonal Entropy: %.4f&#39; % (W, ce))</span>
-<span class="sd">&#39;&#39;&#39;</span>
-
-
 <div class="viewcode-block" id="optimal_transport"><a class="viewcode-back" href="../../../tool.metric.html#tool.metric.otce.optimal_transport">[docs]</a><span class="k">def</span> <span class="nf">optimal_transport</span><span class="p">(</span><span class="n">src_root_dir</span><span class="p">,</span> <span class="n">tar_root_dir</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the Conditional Entropy (CE) using optimal transport between the source</span>
+<span class="sd">    and target domain datasets.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        src_root_dir (str): The directory path of the source domain data.</span>
+<span class="sd">        tar_root_dir (str): The directory path of the target domain data.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ce (float): The conditional entropy indicating the difficulty of transferring</span>
+<span class="sd">                    labels from the source to the target domain.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Read the source and target domain data</span>
     <span class="n">src_x</span><span class="p">,</span> <span class="n">src_y</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">(</span><span class="n">src_root_dir</span><span class="p">)</span>
     <span class="n">tar_x</span><span class="p">,</span> <span class="n">tar_y</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">(</span><span class="n">tar_root_dir</span><span class="p">)</span>
+
+    <span class="c1"># Convert arrays to torch tensors</span>
     <span class="n">src_x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">src_x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
     <span class="n">tar_x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">tar_x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+
+    <span class="c1"># Compute the optimal transport plan and Wasserstein distance</span>
     <span class="n">P</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">compute_coupling</span><span class="p">(</span><span class="n">src_x</span><span class="p">,</span> <span class="n">tar_x</span><span class="p">,</span> <span class="n">src_y</span><span class="p">,</span> <span class="n">tar_y</span><span class="p">)</span>
+
+    <span class="c1"># Compute the conditional entropy</span>
     <span class="n">ce</span> <span class="o">=</span> <span class="n">compute_CE</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">src_y</span><span class="p">,</span> <span class="n">tar_y</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">ce</span></div>
-
-
 </pre></div>
 
            </div>

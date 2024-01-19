@@ -11,8 +11,8 @@ Welcome to Transferability Metric Toolkit's documentation!
    :caption: Contents:
 
 
-   introduction
    tutorial
+   background
    modules
 
 

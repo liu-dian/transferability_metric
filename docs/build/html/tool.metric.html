@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="tool.util package" href="tool.util.html" />
-    <link rel="prev" title="tool package" href="tool.html" /> 
+    <link rel="prev" title="Tool package" href="tool.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,14 +45,15 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">tool</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="tool.html">tool package</a><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="tool.html">Tool package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="tool.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4 current"><a class="current reference internal" href="#">tool.metric package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tool.util.html">tool.util package</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="tool.html#module-tool">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -73,8 +74,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="modules.html">tool</a></li>
-          <li class="breadcrumb-item"><a href="tool.html">tool package</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="tool.html">Tool package</a></li>
       <li class="breadcrumb-item active">tool.metric package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/tool.metric.rst.txt" rel="nofollow"> View page source</a>
@@ -92,8 +93,6 @@
 </section>
 <section id="module-tool.metric.hscore">
 <span id="tool-metric-hscore-module"></span><h2>tool.metric.hscore module<a class="headerlink" href="#module-tool.metric.hscore" title="Permalink to this heading"></a></h2>
-<p>&#64;author: Yong Liu
-&#64;contact: <a class="reference external" href="mailto:liuyong1095556447&#37;&#52;&#48;163&#46;com">liuyong1095556447<span>&#64;</span>163<span>&#46;</span>com</a></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="tool.metric.hscore.h_score">
 <span class="sig-prename descclassname"><span class="pre">tool.metric.hscore.</span></span><span class="sig-name descname"><span class="pre">h_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tool/metric/hscore.html#h_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tool.metric.hscore.h_score" title="Permalink to this definition"></a></dt>
@@ -102,15 +101,12 @@
 <div class="math notranslate nohighlight">
 \[\mathcal{H}=\operatorname{tr}\left(\operatorname{cov}(f)^{-1} \operatorname{cov}\left(\mathbb{E}[f \mid y]\right)\right)\]</div>
 <p>where <span class="math notranslate nohighlight">\(f\)</span> is the features extracted by the model to be ranked, <span class="math notranslate nohighlight">\(y\)</span> is the groud-truth label vector</p>
+<p>The H-score measures the alignment between the feature covariance and the conditional expectation of the
+features given the labels. A higher H-score indicates better transferability.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>features (np.ndarray):features extracted by pre-trained model.
-labels (np.ndarray):  groud-truth labels.</p>
+<dt>Args:</dt><dd><p>root_dir (str): The directory from which to read the features and labels.</p>
 </dd>
-<dt>Shape:</dt><dd><ul class="simple">
-<li><p>features: (N, F), with number of samples N and feature dimension F.</p></li>
-<li><p>labels: (N, ) elements in [0, <span class="math notranslate nohighlight">\(C_t\)</span>), with target class number <span class="math notranslate nohighlight">\(C_t\)</span>.</p></li>
-<li><p>score: scalar.</p></li>
-</ul>
+<dt>Returns:</dt><dd><p>score (float): The computed H-Score, a scalar value representing transferability.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -118,8 +114,6 @@ labels (np.ndarray):  groud-truth labels.</p>
 </section>
 <section id="module-tool.metric.leep">
 <span id="tool-metric-leep-module"></span><h2>tool.metric.leep module<a class="headerlink" href="#module-tool.metric.leep" title="Permalink to this heading"></a></h2>
-<p>&#64;author: Yong Liu
-&#64;contact: <a class="reference external" href="mailto:liuyong1095556447&#37;&#52;&#48;163&#46;com">liuyong1095556447<span>&#64;</span>163<span>&#46;</span>com</a></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="tool.metric.leep.log_expected_empirical_prediction">
 <span class="sig-prename descclassname"><span class="pre">tool.metric.leep.</span></span><span class="sig-name descname"><span class="pre">log_expected_empirical_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tool/metric/leep.html#log_expected_empirical_prediction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tool.metric.leep.log_expected_empirical_prediction" title="Permalink to this definition"></a></dt>
@@ -129,15 +123,12 @@ Evaluate Transferability of Learned Representations (ICML 2020)</a>.</p>
 <div class="math notranslate nohighlight">
 \[\mathcal{T}=\mathbb{E}\log \left(\sum_{z \in \mathcal{C}_s} \hat{P}\left(y \mid z\right) \theta\left(y \right)_{z}\right)\]</div>
 <p>where <span class="math notranslate nohighlight">\(\theta\left(y\right)_{z}\)</span> is the predictions of pre-trained model on source category, <span class="math notranslate nohighlight">\(\hat{P}\left(y \mid z\right)\)</span> is the empirical conditional distribution estimated by prediction and ground-truth label.</p>
+<p>The LEEP score quantifies the expected log-likelihood of the empirical conditional distribution of the
+target labels given the source labels, as predicted by the pre-trained model.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>predictions (np.ndarray): predictions of pre-trained model.
-labels (np.ndarray): groud-truth labels.</p>
+<dt>Args:</dt><dd><p>root_dir (str): The directory from which to read the predictions and labels.</p>
 </dd>
-<dt>Shape:</dt><dd><ul class="simple">
-<li><p>predictions: (N, <span class="math notranslate nohighlight">\(C_s\)</span>), with number of samples N and source class number <span class="math notranslate nohighlight">\(C_s\)</span>.</p></li>
-<li><p>labels: (N, ) elements in [0, <span class="math notranslate nohighlight">\(C_t\)</span>), with target class number <span class="math notranslate nohighlight">\(C_t\)</span>.</p></li>
-<li><p>score: scalar</p></li>
-</ul>
+<dt>Returns:</dt><dd><p>score (float): The computed LEEP score, a scalar value representing transferability.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -145,25 +136,21 @@ labels (np.ndarray): groud-truth labels.</p>
 </section>
 <section id="module-tool.metric.logme">
 <span id="tool-metric-logme-module"></span><h2>tool.metric.logme module<a class="headerlink" href="#module-tool.metric.logme" title="Permalink to this heading"></a></h2>
-<p>&#64;author: Yong Liu
-&#64;contact: <a class="reference external" href="mailto:liuyong1095556447&#37;&#52;&#48;163&#46;com">liuyong1095556447<span>&#64;</span>163<span>&#46;</span>com</a></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="tool.metric.logme.log_maximum_evidence">
 <span class="sig-prename descclassname"><span class="pre">tool.metric.logme.</span></span><span class="sig-name descname"><span class="pre">log_maximum_evidence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tool/metric/logme.html#log_maximum_evidence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tool.metric.logme.log_maximum_evidence" title="Permalink to this definition"></a></dt>
 <dd><p>Log Maximum Evidence in <a class="reference external" href="https://arxiv.org/pdf/2102.11005.pdf">LogME: Practical Assessment of Pre-trained Models
 for Transfer Learning (ICML 2021)</a>.</p>
+<p>This function reads features and targets from the provided directory, and computes the LogME score,
+which can be used to assess the compatibility between the pre-trained features and the target task.
+It can be applied in both classification and regression settings.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>features (np.ndarray): feature matrix from pre-trained model.
-targets (np.ndarray): targets labels/values.
-regression (bool, optional): whether to apply in regression setting. (Default: False)
-return_weights (bool, optional): whether to return bayesian weight. (Default: False)</p>
+<dt>Args:</dt><dd><p>root_dir (str): The directory from which to read the features and targets.
+regression (bool, optional): Whether the task is regression. If False, classification is assumed. (Default: False)
+return_weights (bool, optional): If True, the function also returns Bayesian weights in addition to the LogME score. (Default: False)</p>
 </dd>
-<dt>Shape:</dt><dd><ul class="simple">
-<li><p>features: (N, F) with element in [0, <span class="math notranslate nohighlight">\(C_t\)</span>) and feature dimension F, where <span class="math notranslate nohighlight">\(C_t\)</span> denotes the number of target class</p></li>
-<li><p>targets: (N, ) or (N, C), with C regression-labels.</p></li>
-<li><p>weights: (F, <span class="math notranslate nohighlight">\(C_t\)</span>).</p></li>
-<li><p>score: scalar.</p></li>
-</ul>
+<dt>Returns:</dt><dd><p>score (float): The LogME score, a scalar indicating the transferability.
+weights (np.ndarray, optional): The Bayesian weights matrix, returned only if <cite>return_weights</cite> is True.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -181,16 +168,17 @@ Classification Tasks (ICCV 2019)</a>.</p>
 \[\mathcal{H}=-\sum_{y \in \mathcal{C}_t} \sum_{z \in \mathcal{C}_s} \hat{P}(y, z) \log \frac{\hat{P}(y, z)}{\hat{P}(z)}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\hat{P}(z)\)</span> is the empirical distribution and <span class="math notranslate nohighlight">\(\hat{P}\left(y \mid z\right)\)</span> is the empirical
 conditional distribution estimated by source and target label.</p>
+<p>This implementation calculates NCE using the empirical distributions of source
+and target labels obtained from the provided directories.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>source_labels (np.ndarray): predicted source labels.
-target_labels (np.ndarray): groud-truth target labels.</p>
+<dt>Args:</dt><dd><p>src_root_dir (str): Directory containing the source dataset with labels.
+tar_root_dir (str): Directory containing the target dataset with labels.</p>
 </dd>
-<dt>Shape:</dt><dd><ul class="simple">
-<li><p>source_labels: (N, ) elements in [0, <span class="math notranslate nohighlight">\(C_s\)</span>), with source class number <span class="math notranslate nohighlight">\(C_s\)</span>.</p></li>
-<li><p>target_labels: (N, ) elements in [0, <span class="math notranslate nohighlight">\(C_t\)</span>), with target class number <span class="math notranslate nohighlight">\(C_t\)</span>.</p></li>
-</ul>
+<dt>Returns:</dt><dd><p>A scalar value representing the negative conditional entropy.</p>
 </dd>
 </dl>
+<p>The function reads the source and target data using the <cite>read_data</cite> utility,
+which should return the features and labels for the datasets.</p>
 </dd></dl>
 
 </section>
@@ -199,111 +187,51 @@ target_labels (np.ndarray): groud-truth target labels.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="tool.metric.otce.compute_CE">
 <span class="sig-prename descclassname"><span class="pre">tool.metric.otce.</span></span><span class="sig-name descname"><span class="pre">compute_CE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y_src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y_tar</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tool/metric/otce.html#compute_CE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tool.metric.otce.compute_CE" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Compute the Conditional Entropy (CE) of the target labels given the source labels
+under the optimal transport plan.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>P (np.ndarray): The optimal transport plan matrix.
+Y_src (np.ndarray): Labels for the source domain samples.
+Y_tar (np.ndarray): Labels for the target domain samples.</p>
+</dd>
+<dt>Returns:</dt><dd><p>ce (float): The conditional entropy.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tool.metric.otce.compute_coupling">
 <span class="sig-prename descclassname"><span class="pre">tool.metric.otce.</span></span><span class="sig-name descname"><span class="pre">compute_coupling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_tar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y_src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y_tar</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tool/metric/otce.html#compute_coupling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tool.metric.otce.compute_coupling" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Compute the optimal transport plan (coupling) and the Wasserstein distance between
+source and target distributions using the Earth Mover’s Distance (EMD).</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>X_src (torch.Tensor): Feature matrix for the source domain samples.
+X_tar (torch.Tensor): Feature matrix for the target domain samples.
+Y_src (np.ndarray): Labels for the source domain samples.
+Y_tar (np.ndarray): Labels for the target domain samples.</p>
+</dd>
+<dt>Returns:</dt><dd><p>P (np.ndarray): The optimal transport plan matrix.
+W (float): The Wasserstein distance given by the optimal transport plan.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tool.metric.otce.optimal_transport">
 <span class="sig-prename descclassname"><span class="pre">tool.metric.otce.</span></span><span class="sig-name descname"><span class="pre">optimal_transport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_root_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tar_root_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tool/metric/otce.html#optimal_transport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tool.metric.otce.optimal_transport" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-</section>
-<section id="module-tool.metric">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tool.metric" title="Permalink to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="tool.metric.h_score">
-<span class="sig-prename descclassname"><span class="pre">tool.metric.</span></span><span class="sig-name descname"><span class="pre">h_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tool/metric/hscore.html#h_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tool.metric.h_score" title="Permalink to this definition"></a></dt>
-<dd><p>H-score in <a class="reference external" href="http://yangli-feasibility.com/home/media/icip-19.pdf">An Information-theoretic Approach to Transferability in Task Transfer Learning (ICIP 2019)</a>.</p>
-<p>The H-Score <span class="math notranslate nohighlight">\(\mathcal{H}\)</span> can be described as:</p>
-<div class="math notranslate nohighlight">
-\[\mathcal{H}=\operatorname{tr}\left(\operatorname{cov}(f)^{-1} \operatorname{cov}\left(\mathbb{E}[f \mid y]\right)\right)\]</div>
-<p>where <span class="math notranslate nohighlight">\(f\)</span> is the features extracted by the model to be ranked, <span class="math notranslate nohighlight">\(y\)</span> is the groud-truth label vector</p>
+<dd><p>Calculate the Conditional Entropy (CE) using optimal transport between the source
+and target domain datasets.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>features (np.ndarray):features extracted by pre-trained model.
-labels (np.ndarray):  groud-truth labels.</p>
+<dt>Args:</dt><dd><p>src_root_dir (str): The directory path of the source domain data.
+tar_root_dir (str): The directory path of the target domain data.</p>
 </dd>
-<dt>Shape:</dt><dd><ul class="simple">
-<li><p>features: (N, F), with number of samples N and feature dimension F.</p></li>
-<li><p>labels: (N, ) elements in [0, <span class="math notranslate nohighlight">\(C_t\)</span>), with target class number <span class="math notranslate nohighlight">\(C_t\)</span>.</p></li>
-<li><p>score: scalar.</p></li>
-</ul>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>ce (float): The conditional entropy indicating the difficulty of transferring</dt><dd><p>labels from the source to the target domain.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tool.metric.log_expected_empirical_prediction">
-<span class="sig-prename descclassname"><span class="pre">tool.metric.</span></span><span class="sig-name descname"><span class="pre">log_expected_empirical_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tool/metric/leep.html#log_expected_empirical_prediction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tool.metric.log_expected_empirical_prediction" title="Permalink to this definition"></a></dt>
-<dd><p>Log Expected Empirical Prediction in <a class="reference external" href="http://proceedings.mlr.press/v119/nguyen20b/nguyen20b.pdf">LEEP: A New Measure to
-Evaluate Transferability of Learned Representations (ICML 2020)</a>.</p>
-<p>The LEEP <span class="math notranslate nohighlight">\(\mathcal{T}\)</span> can be described as:</p>
-<div class="math notranslate nohighlight">
-\[\mathcal{T}=\mathbb{E}\log \left(\sum_{z \in \mathcal{C}_s} \hat{P}\left(y \mid z\right) \theta\left(y \right)_{z}\right)\]</div>
-<p>where <span class="math notranslate nohighlight">\(\theta\left(y\right)_{z}\)</span> is the predictions of pre-trained model on source category, <span class="math notranslate nohighlight">\(\hat{P}\left(y \mid z\right)\)</span> is the empirical conditional distribution estimated by prediction and ground-truth label.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>predictions (np.ndarray): predictions of pre-trained model.
-labels (np.ndarray): groud-truth labels.</p>
-</dd>
-<dt>Shape:</dt><dd><ul class="simple">
-<li><p>predictions: (N, <span class="math notranslate nohighlight">\(C_s\)</span>), with number of samples N and source class number <span class="math notranslate nohighlight">\(C_s\)</span>.</p></li>
-<li><p>labels: (N, ) elements in [0, <span class="math notranslate nohighlight">\(C_t\)</span>), with target class number <span class="math notranslate nohighlight">\(C_t\)</span>.</p></li>
-<li><p>score: scalar</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tool.metric.log_maximum_evidence">
-<span class="sig-prename descclassname"><span class="pre">tool.metric.</span></span><span class="sig-name descname"><span class="pre">log_maximum_evidence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tool/metric/logme.html#log_maximum_evidence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tool.metric.log_maximum_evidence" title="Permalink to this definition"></a></dt>
-<dd><p>Log Maximum Evidence in <a class="reference external" href="https://arxiv.org/pdf/2102.11005.pdf">LogME: Practical Assessment of Pre-trained Models
-for Transfer Learning (ICML 2021)</a>.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>features (np.ndarray): feature matrix from pre-trained model.
-targets (np.ndarray): targets labels/values.
-regression (bool, optional): whether to apply in regression setting. (Default: False)
-return_weights (bool, optional): whether to return bayesian weight. (Default: False)</p>
-</dd>
-<dt>Shape:</dt><dd><ul class="simple">
-<li><p>features: (N, F) with element in [0, <span class="math notranslate nohighlight">\(C_t\)</span>) and feature dimension F, where <span class="math notranslate nohighlight">\(C_t\)</span> denotes the number of target class</p></li>
-<li><p>targets: (N, ) or (N, C), with C regression-labels.</p></li>
-<li><p>weights: (F, <span class="math notranslate nohighlight">\(C_t\)</span>).</p></li>
-<li><p>score: scalar.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tool.metric.negative_conditional_entropy">
-<span class="sig-prename descclassname"><span class="pre">tool.metric.</span></span><span class="sig-name descname"><span class="pre">negative_conditional_entropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_root_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tar_root_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tool/metric/nce.html#negative_conditional_entropy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tool.metric.negative_conditional_entropy" title="Permalink to this definition"></a></dt>
-<dd><p>Negative Conditional Entropy in <a class="reference external" href="https://arxiv.org/pdf/1908.08142v1.pdf">Transferability and Hardness of Supervised
-Classification Tasks (ICCV 2019)</a>.</p>
-<p>The NCE <span class="math notranslate nohighlight">\(\mathcal{H}\)</span> can be described as:</p>
-<div class="math notranslate nohighlight">
-\[\mathcal{H}=-\sum_{y \in \mathcal{C}_t} \sum_{z \in \mathcal{C}_s} \hat{P}(y, z) \log \frac{\hat{P}(y, z)}{\hat{P}(z)}\]</div>
-<p>where <span class="math notranslate nohighlight">\(\hat{P}(z)\)</span> is the empirical distribution and <span class="math notranslate nohighlight">\(\hat{P}\left(y \mid z\right)\)</span> is the empirical
-conditional distribution estimated by source and target label.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>source_labels (np.ndarray): predicted source labels.
-target_labels (np.ndarray): groud-truth target labels.</p>
-</dd>
-<dt>Shape:</dt><dd><ul class="simple">
-<li><p>source_labels: (N, ) elements in [0, <span class="math notranslate nohighlight">\(C_s\)</span>), with source class number <span class="math notranslate nohighlight">\(C_s\)</span>.</p></li>
-<li><p>target_labels: (N, ) elements in [0, <span class="math notranslate nohighlight">\(C_t\)</span>), with target class number <span class="math notranslate nohighlight">\(C_t\)</span>.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tool.metric.optimal_transport">
-<span class="sig-prename descclassname"><span class="pre">tool.metric.</span></span><span class="sig-name descname"><span class="pre">optimal_transport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_root_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tar_root_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tool/metric/otce.html#optimal_transport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tool.metric.optimal_transport" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
 
 </section>
 </section>
@@ -312,7 +240,7 @@ target_labels (np.ndarray): groud-truth target labels.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="tool.html" class="btn btn-neutral float-left" title="tool package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tool.html" class="btn btn-neutral float-left" title="Tool package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="tool.util.html" class="btn btn-neutral float-right" title="tool.util package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
