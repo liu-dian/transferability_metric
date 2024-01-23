@@ -8,7 +8,7 @@ from ..util import *
 def compute_coupling(X_src, X_tar, Y_src, Y_tar):
     """
     Compute the optimal transport plan (coupling) and the Wasserstein distance between
-    source and target distributions using the Earth Mover's Distance (EMD).
+    source and target distributions.
 
     Args:
         X_src (torch.Tensor): Feature matrix for the source domain samples.

@@ -18,7 +18,7 @@ Installation
 
 .. code-block:: bash
 
-    pip install your-toolkit-package-name
+    pip install -r requirements.txt
 
 Metrics
 -------
@@ -114,20 +114,31 @@ Usage Example
     if __name__ == '__main__':
         # Define a list of directory sets
         directory_sets = [
-            # Directory set 1
-            # Directory set 2
+            {
+                'tar_root_dir': '/your_path/dataset/tar_dslr_task0',
+                'tar_predictz_dir': '/your_path/dataset/tar_dslr_task0_predictz',
+                'src_root_dir': '/your_path/dataset/src_Office31_amazon_task0_sampled200'
+            },
             # Add more directory sets here
+            {
+                'tar_root_dir': '/your_path/dataset/tar_webcam_task1',
+                'tar_predictz_dir': '/your_path/dataset/tar_webcam_task1_predictz',
+                'src_root_dir': '/your_path/dataset/src_Office31_amazon_task0_sampled200'
+            },
         ]
 
         # Initialize a dictionary to hold the results
         results = {}
 
-        # Iterate over each directory set and calculate metrics
+        # Iterate over each directory set
         for i, dirs in enumerate(directory_sets):
-            # Calculate each metric and store the result
+            # Calculate each metric and store the result in the results dictionary
             results[i] = {
                 'h_score': h_score(dirs['tar_root_dir']),
-                # Other metrics
+                'log_expected_empirical_prediction': log_expected_empirical_prediction(dirs['tar_predictz_dir']),
+                'log_maximum_evidence': log_maximum_evidence(dirs['tar_root_dir']),
+                'negative_conditional_entropy': negative_conditional_entropy(dirs['src_root_dir'], dirs['tar_predictz_dir']),
+                'optimal_transport': optimal_transport(dirs['src_root_dir'], dirs['tar_root_dir'])
             }
 
         # Print the results
